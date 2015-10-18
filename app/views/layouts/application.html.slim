@@ -1,0 +1,45 @@
+doctype 5
+html(dir="ltr" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://ogp.me/ns#" class="#{controller_path.gsub('/', '-')}-controller #{action_name}-action")
+  head
+    = render 'layouts/meta'
+    = javascript_include_tag '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', async: true
+    = stylesheet_link_tag 'application'
+  body
+
+    header#global-header
+      .container
+        .row
+          .three.columns
+            h1
+              = link_to root_path do
+                = image_tag('docrystal-icon.svg', alt: '', id: 'logo-icon')
+                = image_tag('docrystal-logo.svg', alt: 'docrystal', id: 'logo')
+
+          .six.columns
+            = form_tag(root_path, method: :get, id: 'search-box') do
+              = search_field_tag :q, params[:q], placeholder: 'Search for shard by repository name or keyword'
+
+          .one.column
+            .nav= link_to 'About', about_path
+          .one.column
+            .nav= link_to 'Badge', badge_path
+
+    #main-content
+      = yield
+
+      .container
+        <!-- docrystal-footer -->
+        ins(class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5972456505345524" data-ad-slot="6997884090" data-ad-format="auto")
+        javascript:
+          (adsbygoogle = window.adsbygoogle || []).push({});
+
+    footer
+      .container
+        .row
+          .three.columns= link_to 'GitHub', 'https://github.com/docrystal'
+          .three.columns= link_to 'Bug Report', 'https://github.com/docrystal/docrystal/issues'
+          .three.columns= link_to 'Crystal', 'http://crystal-lang.org'
+          .three.columns= link_to 'Contact us', 'mailto:info@docrystal.org'
+
+        = link_to root_path do
+          = image_tag('docrystal-icon.svg', alt: '', id: 'footer-logo-icon')

@@ -1,0 +1,28 @@
+- title('Badge')
+
+.container
+  h1 Badge
+
+  .row
+    .two.columns.badge
+      = image_tag(badge_path(format: 'svg'))
+    .ten.columns
+      textarea(onclick="this.focus();this.select()")
+        | [![docrystal.org](http://docrystal.org/badge.svg)](http://docrystal.org/github.com/<your-github-login>/<github-repository-name>)
+
+  .row
+    .two.columns.badge
+      = image_tag(badge_path(format: 'svg', style: 'round'))
+    .ten.columns
+      textarea(onclick="this.focus();this.select()")
+        | [![docrystal.org](http://docrystal.org/badge.svg?style=round)](http://docrystal.org/github.com/<your-github-login>/<github-repository-name>)
+
+  .row
+    .two.columns.badge
+      = image_tag(badge_path(format: 'svg', style: 'plastic'))
+    .ten.columns
+      textarea(onclick="this.focus();this.select()")
+        | [![docrystal.org](http://docrystal.org/badge.svg?style=plastic)](http://docrystal.org/github.com/<your-github-login>/<github-repository-name>)
+
+  p.text-center Another badge? You can make your original badges on #{link_to('shields.io', 'http://shields.io/')}.
+
