@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hosting: MyString
+  owner: MyString
+  name: MyString
+
+two:
+  hosting: MyString
+  owner: MyString
+  name: MyString
