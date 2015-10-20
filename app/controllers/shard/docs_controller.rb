@@ -25,14 +25,18 @@ class Shard::DocsController < ApplicationController
 
   def show(hosting, owner, name, sha)
     @shard = Shard.find_or_create_by!(hosting: hosting, owner: owner, name: name)
-    @ref = @shard.lookup_ref(@shard.default_branch)
+    @ref = @shard.lookup_ref(sha)
+
+    fail FileNotFound unless @ref
 
     redirect_to doc_serve_path(hosting: hosting, owner: owner, name: name, sha: @ref.name, file: 'index.html')
   end
 
   def file_serve(hosting, owner, name, sha, file)
     @shard = Shard.find_or_create_by!(hosting: hosting, owner: owner, name: name)
-    @doc = @shard.lookup_ref(@shard.default_branch)
+    @doc = @shard.lookup_ref(sha)
+
+    fail FileNotFound unless @doc
 
     @file = @doc.storage.get(file)
 

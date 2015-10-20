@@ -1,16 +1,13 @@
 class StaticPagesController < ApplicationController
-  caches_action :root, :about
-
-  caches_action :badge, cache_path: proc { badge_path(params.except(:controller, :action)) }
-
   def root
   end
 
   def about
+    expires_in 1.day, public: true, must_revalidate: false
   end
 
   def badge
-    expires_in 1.month, public: true
+    expires_in 1.day, public: true, must_revalidate: false
 
     style = (%w(flat round plastic).include?(params[:style]) ? params[:style].to_s : 'flat')
 

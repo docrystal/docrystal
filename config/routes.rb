@@ -7,8 +7,8 @@ Rails.application.routes.draw do
   get 'badge' => 'static_pages#badge', as: :badge
 
   constraints Shard::DocsController::CONSTRAINTS do
-    get ':hosting/:owner/:name' => 'shard/docs#repository'
-    get ':hosting/:owner/:name/:sha' => 'shard/docs#show'
+    get ':hosting/:owner/:name' => 'shard/docs#repository', as: :repository
+    get ':hosting/:owner/:name/:sha' => 'shard/docs#show', as: :sha
     get ':hosting/:owner/:name/:sha/:file' => 'shard/docs#file_serve', as: :doc_serve
   end
 

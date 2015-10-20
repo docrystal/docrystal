@@ -3,6 +3,7 @@ class Shard::Doc < ActiveRecord::Base
 
   validates :shard, presence: true
   validates :sha, uniqueness: { scope: :shard_id }
+  validates :github_commit, presence: true
 
   def self.by_sha(sha)
     find_or_create_by(sha: sha)
@@ -22,5 +23,9 @@ class Shard::Doc < ActiveRecord::Base
 
   def generated?
     generated_at?
+  end
+
+  def github_commit
+    @github_commit ||= Octokit.commit(shard.github_repository_name, sha)
   end
 end
