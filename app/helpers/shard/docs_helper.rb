@@ -1,0 +1,2 @@
+module Shard::DocsHelper
+end

@@ -21,6 +21,10 @@ class Docrystal::Storage
     directory.files.get(path).try(:body)
   end
 
+  def get(path)
+    directory.files.get(path)
+  end
+
   def put(path, body)
     directory.files.create(
       key: path,

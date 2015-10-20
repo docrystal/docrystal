@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151019055342) do
+ActiveRecord::Schema.define(version: 20151020122407) do
 
   create_table "shard_docs", force: :cascade do |t|
     t.integer  "shard_id",          null: false
@@ -25,6 +25,18 @@ ActiveRecord::Schema.define(version: 20151019055342) do
 
   add_index "shard_docs", ["shard_id", "sha"], name: "index_shard_docs_on_shard_id_and_sha", unique: true
   add_index "shard_docs", ["shard_id"], name: "index_shard_docs_on_shard_id"
+
+  create_table "shard_refs", force: :cascade do |t|
+    t.integer  "shard_id",   null: false
+    t.integer  "doc_id",     null: false
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "shard_refs", ["doc_id"], name: "index_shard_refs_on_doc_id"
+  add_index "shard_refs", ["shard_id", "name"], name: "index_shard_refs_on_shard_id_and_name", unique: true
+  add_index "shard_refs", ["shard_id"], name: "index_shard_refs_on_shard_id"
 
   create_table "shards", force: :cascade do |t|
     t.string   "hosting",    limit: 20, null: false

@@ -25,7 +25,7 @@ html(dir="ltr" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://ogp
             .nav= link_to 'Badge', badge_path
 
     #main-content
-      = yield
+      = content_for?(:body) ? yield(:body) : yield
 
       .container
         <!-- docrystal-footer -->

@@ -6,6 +6,12 @@ Rails.application.routes.draw do
   get 'about' => 'static_pages#about', as: :about
   get 'badge' => 'static_pages#badge', as: :badge
 
+  constraints Shard::DocsController::CONSTRAINTS do
+    get ':hosting/:owner/:name' => 'shard/docs#repository'
+    get ':hosting/:owner/:name/:sha' => 'shard/docs#show'
+    get ':hosting/:owner/:name/:sha/:file' => 'shard/docs#file_serve', as: :doc_serve
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shard_id: 
+  doc_id: 
+  name: MyString
+
+two:
+  shard_id: 
+  doc_id: 
+  name: MyString
