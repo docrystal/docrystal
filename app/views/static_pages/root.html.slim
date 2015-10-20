@@ -3,7 +3,7 @@
 .container
   = form_tag(search_path, method: :get, id: 'root-search-box') do
     h2 Search for shards
-    = search_field_tag :q, params[:q], placeholder: 'Search for shard by repository name or keyword'
+    = search_field_tag :q, params[:q], placeholder: 'Search for shard by repository name or keyword', autofocus: true
     p.count There are a total of #{Shard.count} shards and #{Shard::Doc.count} docs.
 
   markdown:
