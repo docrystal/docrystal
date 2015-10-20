@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shard_id: 
+  sha: MyString
+  error: MyString
+  error_description: MyText
+  generated_at: 2015-10-19 14:53:44
+
+two:
+  shard_id: 
+  sha: MyString
+  error: MyString
+  error_description: MyText
+  generated_at: 2015-10-19 14:53:44
