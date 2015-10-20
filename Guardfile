@@ -15,11 +15,13 @@ end
 
 guard 'rails' do
   watch('Gemfile.lock')
+  watch(%r{\.env.*})
   watch(%r{^(config|lib)/.*})
 end
 
 guard 'sidekiq', environment: 'development' do
   watch('Gemfile.lock')
+  watch(%r{\.env.*})
   watch(%r{^(config|lib)/.*})
   watch(%r{^app/jobs/(.+)\.rb$})
   watch(%r{^app/models/(.+)\.rb$})

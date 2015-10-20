@@ -1,6 +1,7 @@
 /*
  *= require normalize
  *= require skeleton
+ *= require terminal
  *= require_tree .
  *= require_self
  */

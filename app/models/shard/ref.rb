@@ -7,7 +7,7 @@ class Shard::Ref < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { scope: :shard_id }
   validates :github_ref, presence: true
 
-  delegate :storage, :sha, :generated?, to: :doc
+  delegate :storage, :sha, :log_redis_key, :log_pusher_key, :generated?, :error?, :error, :error_description, to: :doc
 
   def github_ref
     @github_ref ||= Octokit.ref(shard.github_repository_name, "heads/#{name}")

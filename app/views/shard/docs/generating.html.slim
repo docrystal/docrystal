@@ -1,0 +1,50 @@
+.container.text-center
+  h1 Generating now
+
+  p Please wait a minutes.
+
+  pre#console.term-container== Terminal.render(Docrystal.redis.get(@doc.log_redis_key))
+
+= javascript_include_tag 'https://js.pusher.com/3.0/pusher.min.js'
+javascript:
+  jQuery(function($) {
+    var pusher = new Pusher('#{Pusher.key}', { encrypted: true });
+    var channel = pusher.subscribe('#{@doc.log_pusher_key}');
+    var console = $('#console');
+
+    var appendLog = function(message, replace) {
+      var offsetHeight = console.get(0).offsetHeight;
+      var scrollHeight = console.get(0).scrollHeight;
+      var currentScroll = console.scrollTop();
+
+      if(replace) {
+        console.html(message);
+      } else {
+        console.append(message);
+      }
+
+      if((offsetHeight + currentScroll) >= scrollHeight) {
+        console.scrollTop(console.get(0).scrollHeight);
+      }
+    };
+
+    channel.bind('update', function(data) {
+      appendLog(data.terminal, true);
+    });
+
+    channel.bind('success', function(data) {
+      appendLog("\nGenerate successed.");
+
+      setTimeout(function() {
+        location.reload();
+      }, 1000);
+    });
+
+    channel.bind('fail', function(data) {
+      appendLog("\nGenerate failed.");
+
+      setTimeout(function() {
+        location.reload();
+      }, 1000);
+    });
+  });

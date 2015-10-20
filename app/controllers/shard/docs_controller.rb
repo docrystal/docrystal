@@ -38,6 +38,9 @@ class Shard::DocsController < ApplicationController
 
     fail FileNotFound unless @doc
 
+    return(render('generating')) unless @doc.generated?
+    return(render('error')) if @doc.error?
+
     @file = @doc.storage.get(file)
 
     if @file

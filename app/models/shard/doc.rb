@@ -5,6 +5,8 @@ class Shard::Doc < ActiveRecord::Base
   validates :sha, uniqueness: { scope: :shard_id }
   validates :github_commit, presence: true
 
+  after_create :enqueue_job
+
   def self.by_sha(sha)
     find_or_create_by(sha: sha)
   end
@@ -22,10 +24,24 @@ class Shard::Doc < ActiveRecord::Base
   end
 
   def generated?
-    generated_at?
+    generated_at? || error?
   end
 
   def github_commit
     @github_commit ||= Octokit.commit(shard.github_repository_name, sha)
+  end
+
+  def log_pusher_key
+    "doc-log-#{Digest::SHA1.hexdigest(id.to_s)}"
+  end
+
+  def log_redis_key
+    "doc/log/#{id}"
+  end
+
+  private
+
+  def enqueue_job
+    Shard::Doc::GenerateJob.perform_later(id)
   end
 end

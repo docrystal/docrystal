@@ -1,33 +1,59 @@
 require 'open3'
+require 'thwait'
 
 class Shard::Doc::GenerateJob < ActiveJob::Base
+  class ShellError < StandardError
+  end
+
   queue_as :default
 
-  def perform(shard_id, sha)
-    @shard = Shard.find(shard_id)
-    @doc = @shard.docs.by_sha(sha)
+  before_perform do
+    RequestStore.clear!
+  end
+
+  def perform(doc_id)
+    @doc = Shard::Doc.find(doc_id)
 
     return unless @doc
 
-    logger.info("Checkout to #{working_dir}")
+    sleep 2
+
+    log("Clone #{@doc.shard.full_name}")
     FileUtils.mkdir_p(working_dir)
 
-    @repository = Rugged::Repository.clone_at(@shard.git_url, working_dir.to_s)
-    @repository.checkout(@doc.sha)
+    progress_lambda = lambda do |msg|
+      log(msg, plain: false)
+    end
+
+    @repository = Rugged::Repository.clone_at(@doc.shard.git_url, working_dir.to_s, progress: progress_lambda)
+    @repository.checkout_tree(@doc.sha, strategy: :force)
+    log("Checkout : #{@doc.sha}")
 
     generate_document
     upload_document
 
     @doc.touch(:generated_at)
-  rescue ActiveRecord::RecordNotFound
+    pusher_threads.join(Thread.new { Pusher.trigger(@doc.log_pusher_key, 'success', at: Time.current) })
+  rescue => e
+    if @doc
+      @doc.update(error: e.class, error_description: e.message)
+      pusher_threads.join(Thread.new { Pusher.trigger(@doc.log_pusher_key, 'fail', at: Time.current) })
+    end
   ensure
-    FileUtils.rm_rf(working_dir) if @doc && File.directory?(working_dir)
+    pusher_threads.all_waits
+
+    if @doc
+      FileUtils.rm_rf(working_dir) if File.directory?(working_dir)
+      Docrystal.redis.del(@doc.log_redis_key)
+    end
   end
 
   private
 
   def working_dir
-    @working_dir ||= Rails.root.join('tmp', 'crystal-doc', "#{@shard.id}-#{@doc.id}-#{Time.current.to_f}")
+    @working_dir ||= Rails.root.join(
+      'tmp', 'crystal-doc', Digest::SHA1.hexdigest("#{@doc.shard_id}-#{@doc.id}-#{Time.current.to_f}")
+    )
   end
 
   def generate_document
@@ -37,43 +63,80 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
   end
 
   def execute_pre_commands
-    shell('shards', 'install') if File.exists?(working_dir.join('shard.yml'))
+    if File.exists?(working_dir.join('shard.yml'))
+      shell('shards', 'install')
+    else
+      shell('crystal', 'deps') if File.exists?(working_dir.join('Projectfile'))
+    end
   end
 
   def execute_doc_commands
-    shell('crystal', 'doc')
+    if @doc.shard.full_name == 'github.com/manastech/crystal'
+      shell('make', 'doc')
+    else
+      shell('crystal', 'doc')
+    end
   end
 
   def execute_post_commands
   end
 
   def upload_document
-    Dir[working_dir.join('doc/**/*')].each do |file|
+    log("\n")
+
+    Parallel.each(Dir[working_dir.join('doc/**/*')], in_threads: 16) do |file|
       next if File.directory?(file)
 
       path = file.sub(%r{^#{Regexp.escape(working_dir.to_s)}/doc/}, '')
-      logger.info("Upload: #{path}")
+      log("Upload: #{path}\r", plain: false)
 
       open(file) do |f|
         @doc.storage.put(path, f)
       end
     end
+    log("\nAll File uploaded")
   end
 
   def shell(cmd, *args)
-    logger.info("$ #{cmd} #{args.join(' ')}")
-    Open3.popen3("#{cmd} #{args.join(' ')}", chdir: working_dir) do |input, stdout, stderr, wait|
+    log("$ #{cmd} #{args.join(' ')}")
+
+    cmd_log = ["$ #{cmd} #{args.join(' ')}\n"]
+
+    retval = Open3.popen3("#{cmd} #{args.join(' ')}", chdir: working_dir) do |input, stdout, stderr, wait|
       input.close
 
       stdout.each do |line|
-        logger.info(line)
+        log(line, plain: false)
+        cmd_log << line
       end
 
       stderr.each do |line|
         logger.error(line)
+        cmd_log << line
       end
 
       wait.value
     end
+
+    fail ShellError, cmd_log.join("") unless retval.success?
+  end
+
+  def log(msg, plain: true)
+    logger.info(msg.strip)
+
+    if @doc
+      msg += "\n" if plain && msg[-1] != "\n"
+      terminal << msg
+      pusher_threads.join(Thread.new(Terminal.render(terminal)) { |msg| Pusher.trigger(@doc.log_pusher_key, 'update', terminal: msg) })
+      Docrystal.redis.append(@doc.log_redis_key, msg)
+    end
+  end
+
+  def pusher_threads
+    @pusher_threads ||= ThreadsWait.new
+  end
+
+  def terminal
+    @terminal ||= ""
   end
 end
