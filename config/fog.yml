@@ -1,0 +1,9 @@
+development:
+  provider: 'Local'
+  local_root: 'tmp/fog'
+
+test:
+  provider: 'Local'
+  local_root: 'tmp/fog'
+
+production:

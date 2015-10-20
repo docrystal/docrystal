@@ -6,9 +6,15 @@ gem 'actionpack-action_caching'
 gem 'autoprefixer-rails'
 gem 'browserify-rails'
 gem 'event_tracker'
+gem 'fog'
+gem 'hiredis'
 gem 'meta-tags', require: 'meta_tags'
 gem 'redcarpet'
+gem 'redis', require: %w(redis redis/connection/hiredis)
+gem 'rugged'
 gem 'sass-rails', '~> 5.0'
+gem 'sidekiq'
+gem 'sinatra', require: false
 gem 'sitemap_generator'
 gem 'slim-rails'
 gem 'sqlite3'
@@ -19,6 +25,10 @@ group :development, :test do
 end
 
 group :development do
-  gem 'web-console', '~> 2.0'
+  gem 'guard', require: false
+  gem 'guard-bundler', require: false
+  gem 'guard-rails', require: false
+  gem 'guard-sidekiq', require: false
   gem 'spring'
+  gem 'web-console', '~> 2.0'
 end

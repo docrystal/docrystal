@@ -28,6 +28,8 @@ module Docrystal
     config.browserify_rails.evaluate_node_modules = Rails.env.development?
     config.browserify_rails.commandline_options = ['-t browserify-shim', '--fast']
 
+    config.active_job.queue_adapter = :sidekiq
+
     config.event_tracker.google_analytics_key = ENV['GOOGLE_ANALYTICS_ID'] || 'UA-65028879-2'
   end
 end
