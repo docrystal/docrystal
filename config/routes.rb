@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     get ':hosting/:owner/:name/:sha/:file' => 'shard/docs#file_serve', as: :doc_serve
   end
 
+  get 'search' => 'search#show', as: :search
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

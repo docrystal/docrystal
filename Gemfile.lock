@@ -41,6 +41,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
+    ansi (1.5.0)
     arel (6.0.3)
     autoprefixer-rails (6.0.3)
       execjs
@@ -77,6 +78,23 @@ GEM
     dotenv-rails (2.0.2)
       dotenv (= 2.0.2)
       railties (~> 4.0)
+    elasticsearch (1.0.14)
+      elasticsearch-api (= 1.0.14)
+      elasticsearch-transport (= 1.0.14)
+    elasticsearch-api (1.0.14)
+      multi_json
+    elasticsearch-dsl (0.1.2)
+    elasticsearch-extensions (0.0.19)
+      ansi
+      ruby-prof
+    elasticsearch-model (0.1.8)
+      activesupport (> 3)
+      elasticsearch (> 0.4)
+      hashie
+    elasticsearch-rails (0.1.8)
+    elasticsearch-transport (1.0.14)
+      faraday
+      multi_json
     erubis (2.7.0)
     escape_utils (1.1.0)
     event_tracker (0.3.0)
@@ -214,6 +232,7 @@ GEM
     guard-sidekiq (0.1.0)
       guard (>= 2)
       sidekiq
+    hashie (3.4.2)
     hiredis (0.6.0)
     hitimes (1.2.3)
     httpclient (2.6.0.1)
@@ -307,6 +326,7 @@ GEM
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
     request_store (1.2.0)
+    ruby-prof (0.15.8)
     rugged (0.23.3)
     sass (3.4.19)
     sass-rails (5.0.4)
@@ -378,6 +398,10 @@ DEPENDENCIES
   browserify-rails
   byebug
   dotenv-rails
+  elasticsearch-dsl
+  elasticsearch-extensions
+  elasticsearch-model
+  elasticsearch-rails
   event_tracker
   faraday
   faraday-http-cache

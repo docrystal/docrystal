@@ -1,0 +1,26 @@
+.search-controller.show-action {
+  .shard {
+    position: relative;
+    margin: 12px 0;
+
+    .doc-link a {
+      display: block;
+      padding: 6px 0;
+      line-height: 30px;
+      text-decoration: none;
+    }
+
+    .repo-link {
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      margin-top: -12px;
+
+      img {
+        display: block;
+        height: 24px;
+      }
+    }
+  }
+}

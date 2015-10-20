@@ -1,0 +1,10 @@
+.container
+  p Try this search on #{link_to 'Crystalshards', 'https://crystalshards.herokuapp.com/', target: '_blank' } or #{link_to 'GitHub', "https://github.com/search?q=#{CGI.escape(params[:q])}+language:crystal", target: '_blank' }.
+
+  .shards
+    - @shards.each do |shard|
+      .shard
+        .doc-link= link_to shard.full_name, repository_path(hosting: shard.hosting, owner: shard.owner, name: shard.name)
+        .repo-link
+          = link_to "https://#{shard.full_name}", target: '_blank' do
+            = image_tag 'GitHub-Mark-64px.png', alt: shard.github_repository_name
