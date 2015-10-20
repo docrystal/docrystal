@@ -53,7 +53,7 @@ class Shard < ActiveRecord::Base
 
     doc = docs.by_sha(obj.commit.sha)
     ref = refs.find_or_initialize_by(name: name)
-    ref.update!(doc: doc)
+    ref.update!(doc: doc) if ref.doc_id != doc.id
 
     ref
   end
