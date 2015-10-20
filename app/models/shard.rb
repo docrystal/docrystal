@@ -93,7 +93,7 @@ class Shard < ActiveRecord::Base
   end
 
   def github_repository
-    @github_repository ||= Octokit.repository(github_repository_name)
+    @github_repository ||= Docrystal.octokit.repository(github_repository_name)
   end
 
   def default_branch
@@ -102,13 +102,13 @@ class Shard < ActiveRecord::Base
 
   def github_branches
     @github_branches ||= Hash[*(
-      Octokit.branches(github_repository_name).map { |branch| [branch.name, branch] }.flatten
+      Docrystal.octokit.branches(github_repository_name).map { |branch| [branch.name, branch] }.flatten
     )]
   end
 
   def github_tags
     @github_tags ||= Hash[*(
-      Octokit.tags(github_repository_name).map { |tag| [tag.name, tag] }.flatten
+      Docrystal.octokit.tags(github_repository_name).map { |tag| [tag.name, tag] }.flatten
     )]
   end
 

@@ -59,6 +59,8 @@ class Shard::DocsController < ApplicationController
   def append_exdoc_to_body
     body = response.body
 
+    return unless @file
+
     header_insert_at = body.index('</head')
     return unless header_insert_at
 

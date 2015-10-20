@@ -84,13 +84,15 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
   def upload_document
     log("\n")
 
-    Parallel.each(Dir[working_dir.join('doc/**/*')], in_threads: 16) do |file|
-      next if File.directory?(file)
+    files = Dir[working_dir.join('doc/**/*')].select { |path| !File.directory?(path) }
+    files.map! { |file| file.sub(%r{^#{Regexp.escape(working_dir.to_s)}/doc/}, '') }
 
-      path = file.sub(%r{^#{Regexp.escape(working_dir.to_s)}/doc/}, '')
-      log("Upload: #{path}\r", plain: false)
+    max_filename_length = files.map(&:length).max
 
-      open(file) do |f|
+    Parallel.each(files, in_threads: 16) do |path|
+      log("Upload: #{path.rjust(max_filename_length)}\r", plain: false)
+
+      open(working_dir.join('doc', path)) do |f|
         @doc.storage.put(path, f)
       end
     end

@@ -32,6 +32,7 @@ gem 'request_store'
 gem 'rugged'
 gem 'sass-rails', '~> 5.0'
 gem 'sidekiq'
+gem 'sidekiq-cron'
 gem 'sinatra', require: false
 gem 'sitemap_generator'
 gem 'slim-rails'

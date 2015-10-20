@@ -28,7 +28,7 @@ class Shard::Doc < ActiveRecord::Base
   end
 
   def github_commit
-    @github_commit ||= Octokit.commit(shard.github_repository_name, sha)
+    @github_commit ||= Docrystal.octokit.commit(shard.github_repository_name, sha)
   end
 
   def log_pusher_key
