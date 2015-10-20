@@ -1,5 +1,5 @@
 class Shard::Ref < ActiveRecord::Base
-  belongs_to :shard
+  belongs_to :shard, touch: true
   belongs_to :doc, class_name: 'Shard::Doc'
 
   validates :shard, presence: true

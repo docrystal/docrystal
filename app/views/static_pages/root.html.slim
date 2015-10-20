@@ -1,2 +1,22 @@
 - set_meta_tags(title: 'docrystal.org hosts documentation for Crystal packages on GitHub', reverse: false)
+
 .container
+  = form_tag(search_path, method: :get, id: 'root-search-box') do
+    h2 Search for shards
+    = search_field_tag :q, params[:q], placeholder: 'Search for shard by repository name or keyword'
+    p.count There are a total of #{Shard.count} shards and #{Shard::Doc.count} docs.
+
+  markdown:
+    docrystal.org hosts documentation for Crystal packages on GitHub.
+
+    Read the [About Page](#{about_path}) for information about adding packages to docrystal and more.
+
+  h4 Recent updated shards
+
+  .shards
+    - Shard.order(updated_at: :desc).limit(15).each do |shard|
+      .shard
+        .doc-link= link_to shard.full_name, repository_path(hosting: shard.hosting, owner: shard.owner, name: shard.name)
+        .repo-link
+          = link_to "https://#{shard.full_name}", target: '_blank' do
+            = image_tag 'GitHub-Mark-64px.png', alt: shard.github_repository_name

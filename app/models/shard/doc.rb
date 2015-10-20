@@ -1,5 +1,5 @@
 class Shard::Doc < ActiveRecord::Base
-  belongs_to :shard
+  belongs_to :shard, touch: true
 
   validates :shard, presence: true
   validates :sha, uniqueness: { scope: :shard_id }
