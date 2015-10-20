@@ -13,6 +13,8 @@ class Shard::DocsController < ApplicationController
     file: FILE_REGEXP
   }
 
+  after_action :append_exdoc_to_body, only: %i(file_serve)
+
   class FileNotFound < StandardError
   end
 
@@ -50,5 +52,23 @@ class Shard::DocsController < ApplicationController
     else
       fail FileNotFound, "File Not Found: #{@shard.full_name}##{@doc.sha} / #{file}"
     end
+  end
+
+  private
+
+  def append_exdoc_to_body
+    body = response.body
+
+    header_insert_at = body.index('</head')
+    return unless header_insert_at
+
+    body.insert(header_insert_at, render_to_string(partial: 'exdoc_header'))
+
+    footer_insert_at = body.index('</body')
+    return unless footer_insert_at
+
+    body.insert(footer_insert_at, render_to_string(partial: 'exdoc_footer'))
+
+    response.body = body
   end
 end

@@ -1,0 +1,61 @@
+$exdoc-height : 38px;
+
+#types-list, #main-content {
+  top: $exdoc-height !important;
+}
+
+#docrystal-exdoc-footer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 30px 0 12px;
+  height: $exdoc-height;
+  background-color: #efefef;
+  font-size: 14px;
+  line-height: $exdoc-height;
+  color: #333;
+  border-bottom: 1px solid #999;
+
+  a {
+    color: #333;
+    text-decoration: none;
+  }
+
+  .repository-separator {
+    margin: 0 6px;
+  }
+
+  .commit-sha {
+    display: inline-block;
+    max-width: 5.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
+    font-family: Ricty, monospace;
+
+    &:hover {
+      max-width: none;
+    }
+  }
+
+  #github-logo {
+    margin-right: 6px;
+    height: 18px;
+    vertical-align: middle;
+  }
+
+  #docrystal-root {
+    display: block;
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    height: 18px;
+  }
+
+  #docrystal-icon, #docrystal-logo {
+    margin-left: 6px;
+    height: 18px;
+  }
+}

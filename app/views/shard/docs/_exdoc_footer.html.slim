@@ -1,0 +1,16 @@
+#docrystal-exdoc-footer
+  = link_to "https://#{@doc.shard.full_name}", target: '_blank' do
+    = image_tag 'GitHub-Mark-64px.png', id: 'github-logo'
+    = @doc.shard.full_name
+  span.repository-separator @
+  = link_to "https://#{@doc.shard.full_name}/tree/#{@doc.name}", target: '_blank' do
+    = @doc.name
+  - if @doc.is_a?(Shard::Ref)
+    span.repository-separator= '('
+    = link_to "https://#{@doc.shard.full_name}/tree/#{@doc.sha}", target: '_blank', class: 'commit-sha' do
+      = @doc.sha
+    span.repository-separator= ')'
+
+  = link_to root_path, id: 'docrystal-root' do
+    = image_tag 'docrystal-icon.svg', id: 'docrystal-icon', alt: 'docrystal.org'
+    = image_tag 'docrystal-logo.svg', id: 'docrystal-logo', alt: 'docrystal.org'
