@@ -5,6 +5,18 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
   class ShellError < StandardError
   end
 
+  ALLOWED_ENVS = %w(
+    PATH
+    RAILS_ENV
+    RACK_ENV
+    BUNDLE_BIN_PATH
+    BUNDLE_GEMFILE
+    TMPDIR
+    LANG
+    HOME
+    DISPLAY
+  )
+
   queue_as :default
 
   before_perform do
@@ -63,6 +75,8 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
   end
 
   def execute_pre_commands
+    shell('env')
+
     if File.exists?(working_dir.join('shard.yml'))
       shell('shards', 'install')
     else
@@ -104,7 +118,7 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
 
     cmd_log = ["$ #{cmd} #{args.join(' ')}\n"]
 
-    retval = Open3.popen3("#{cmd} #{args.join(' ')}", chdir: working_dir) do |input, stdout, stderr, wait|
+    retval = Open3.popen3(environments, cmd, *args, chdir: working_dir) do |input, stdout, stderr, wait|
       input.close
 
       stdout.each do |line|
@@ -140,5 +154,13 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
 
   def terminal
     @terminal ||= ""
+  end
+
+  def environments
+    @environments ||= ENV.to_hash.tap do |env|
+      (env.keys - ALLOWED_ENVS).each do |key|
+        env[key] = '******'
+      end
+    end
   end
 end

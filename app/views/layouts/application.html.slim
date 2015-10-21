@@ -37,10 +37,12 @@ html(dir="ltr" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://ogp
     footer
       .container
         .row
-          .three.columns= link_to 'GitHub', 'https://github.com/docrystal'
-          .three.columns= link_to 'Bug Report', 'https://github.com/docrystal/docrystal/issues'
-          .three.columns= link_to 'Crystal', 'http://crystal-lang.org'
-          .three.columns= link_to 'Contact us', 'mailto:info@docrystal.org'
+          .two.columns= link_to 'Crystal', 'http://crystal-lang.org'
+          .two.columns= link_to 'GitHub', 'https://github.com/docrystal'
+          .two.columns= link_to 'Bug Report', 'https://github.com/docrystal/docrystal/issues'
+          .two.columns= link_to 'Blog', 'http://info.docrystal.org'
+          .two.columns= link_to 'Twitter', 'https://twitter.com/docrystal_org'
+          .two.columns= link_to 'Contact us', 'mailto:info@docrystal.org'
 
         = link_to root_path do
           = image_tag('docrystal-icon.svg', alt: '', id: 'footer-logo-icon')
