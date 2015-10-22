@@ -46,6 +46,11 @@ group :development, :test do
 end
 
 group :development do
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rsync-git'
+  gem 'droplet_kit'
   gem 'guard', require: false
   gem 'guard-bundler', require: false
   gem 'guard-rails', require: false

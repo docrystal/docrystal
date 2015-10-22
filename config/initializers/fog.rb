@@ -7,27 +7,34 @@ class Docrystal::Storage
     Fog::Storage.new(config)
   end
 
-  def initialize(directory)
-    @directory = self.class.fog_storage.directories.create(key: directory, public: true)
+  def self.fog_directory
+    dir = fog_storage.directories.get(config[:directory])
+    dir = fog_storage.directories.create(key: config[:directory], public: true) unless dir
+    dir
+  end
+
+  def initialize(prefix)
+    @prefix = Pathname.new(prefix)
+    @directory = self.class.fog_directory
   end
 
   attr_reader :directory
 
   def exists?(path)
-    directory.files.head(path).present?
+    directory.files.head(@prefix.join(path)).present?
   end
 
   def read(path)
-    directory.files.get(path).try(:body)
+    directory.files.get(@prefix.join(path)).try(:body)
   end
 
   def get(path)
-    directory.files.get(path)
+    directory.files.get(@prefix.join(path))
   end
 
   def put(path, body)
     directory.files.create(
-      key: path,
+      key: @prefix.join(path),
       body: body,
       public: true
     )
