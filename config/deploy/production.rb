@@ -17,7 +17,7 @@ digitalocean = DropletKit::Client.new(access_token: ENV['DIGITALOCEAN_API_TOKEN'
 # Don't use `:all`, it's a meta role.
 
 droplets = digitalocean.droplets.all.select do |droplet|
-  droplet.name =~ /\Adocrystal-rails-\d+\Z/
+  droplet.name =~ /\Adocrystal-app-\d+\Z/
 end
 
 droplet_ips = droplets.map do |droplet|
@@ -26,7 +26,7 @@ end
 
 role :app, droplet_ips
 role :web, droplet_ips
-role :db, droplet_ips
+role :db, droplet_ips.sample(1)
 
 set :rails_env, 'production'
 
