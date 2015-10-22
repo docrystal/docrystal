@@ -40,6 +40,8 @@ gem 'slim-rails'
 gem 'sqlite3'
 gem 'terminal'
 gem 'uglifier', '>= 1.3.0'
+gem 'unicorn'
+gem 'unicorn-worker-killer'
 
 group :development, :test do
   gem 'byebug'
@@ -49,7 +51,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
-  gem 'capistrano-rsync-git'
+  gem 'capistrano3-unicorn'
   gem 'droplet_kit'
   gem 'guard', require: false
   gem 'guard-bundler', require: false

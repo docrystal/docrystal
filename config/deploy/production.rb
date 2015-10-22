@@ -28,6 +28,7 @@ role :app, droplet_ips
 role :web, droplet_ips
 role :db, droplet_ips
 
+set :rails_env, 'production'
 
 set :linked_files, fetch(:linked_files, []).push(
   '.env.production'
