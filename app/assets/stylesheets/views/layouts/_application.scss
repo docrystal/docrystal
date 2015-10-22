@@ -77,16 +77,20 @@ footer {
     color: #333;
   }
 
-  #footer-logo-icon {
-    display: block;
-    margin: 0 auto;
-    width: 50px;
-    filter: grayscale(100%);
-    transition: filter .2s ease-in;
-  }
+  .powered-by {
+    a {
+      display: block;
+      width: 100%;
+      color: #999;
+    }
 
-  a:hover #footer-logo-icon {
-    filter: grayscale(0%);
+    .logo {
+      display: block;
+      margin: 30px auto 0 auto;
+      max-width: 100%;
+      max-height: 30px;
+      transition: filter .2s ease-in;
+    }
   }
 }
 

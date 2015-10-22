@@ -44,5 +44,16 @@ html(dir="ltr" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://ogp
           .two.columns= link_to 'Twitter', 'https://twitter.com/docrystal_org'
           .two.columns= link_to 'Contact us', 'mailto:info@docrystal.org'
 
-        = link_to root_path do
-          = image_tag('docrystal-icon.svg', alt: '', id: 'footer-logo-icon')
+        .row.powered-by
+          .four.columns
+            = link_to 'https://www.digitalocean.com/?refcode=934089c34e7c' do
+              | Hosted by
+              = image_tag('digitalocean-logo.png', alt: 'Digital Ocean', class: 'logo')
+          .four.columns
+            = link_to 'https://mackerel.io/' do
+              | Monitored by
+              = image_tag('mackerel-logo.png', alt: 'Mackerel', class: 'logo')
+          .four.columns
+            = link_to 'https://github.com/docrystal' do
+              | Developed by
+              = image_tag('docrystal-logo.svg', alt: 'docrystal', class: 'logo')
