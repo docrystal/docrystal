@@ -40,11 +40,16 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
 )
 
 # Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :default_env, {
+  path: "/usr/local/ruby/bin:/usr/local/node/bin:$PATH"
+}
 
 # Default value for keep_releases is 5
 set :keep_releases, 3
 set :keep_assets, 2
+
+set :bundle_flags, '--deployment'
+set :bundle_jobs, 4
 
 namespace :deploy do
   desc 'Restart application'
@@ -69,7 +74,7 @@ namespace :deploy do
     task :upload_linked_files do
       on roles(:app), in: :groups, limit: 3 do
         fetch(:linked_files).each do |file|
-          upload!(file, "#{shared_path}/#{file}.tmpl")
+          upload!(file, "#{shared_path}/#{file}")
         end
       end
     end

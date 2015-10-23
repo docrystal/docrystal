@@ -31,7 +31,6 @@ gem 'rambulance'
 gem 'redcarpet'
 gem 'redis', require: %w(redis redis/connection/hiredis)
 gem 'request_store'
-gem 'rugged'
 gem 'sass-rails', '~> 5.0'
 gem 'sidekiq'
 gem 'sidekiq-cron'
