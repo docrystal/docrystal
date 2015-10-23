@@ -35,6 +35,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
   'tmp/pids',
   'tmp/cache',
   'tmp/sockets',
+  'node_modules',
   'vendor/bundle',
   'public/system'
 )

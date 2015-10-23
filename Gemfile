@@ -50,6 +50,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
+  gem 'capistrano-sidekiq'
   gem 'capistrano3-unicorn'
   gem 'droplet_kit'
   gem 'guard', require: false

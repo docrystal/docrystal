@@ -68,6 +68,9 @@ GEM
     capistrano-rails (1.1.5)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano-sidekiq (0.5.3)
+      capistrano
+      sidekiq
     capistrano3-unicorn (0.2.1)
       capistrano (~> 3.1, >= 3.1.0)
     celluloid (0.17.2)
@@ -468,6 +471,7 @@ DEPENDENCIES
   capistrano
   capistrano-bundler
   capistrano-rails
+  capistrano-sidekiq
   capistrano3-unicorn
   docker-api
   dotenv-rails
