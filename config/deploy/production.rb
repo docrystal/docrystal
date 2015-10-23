@@ -36,6 +36,7 @@ set :linked_files, fetch(:linked_files, []).push(
 
 set :ssh_options, {
   user: 'docrystal',
+  port: 2022,
   forward_agent: false,
   auth_methods: %w(publickey)
 }
