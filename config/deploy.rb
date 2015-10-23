@@ -53,6 +53,18 @@ set :bundle_flags, '--deployment'
 set :bundle_jobs, 4
 
 namespace :deploy do
+  task create_index: [:set_rails_env] do
+    on roles(:db) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, "elasticsearch:index:create"
+        end
+      end
+    end
+  end
+
+  after 'deploy:updated', 'deploy:create_index'
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do

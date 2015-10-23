@@ -1,3 +1,5 @@
+require 'sidekiq/api'
+
 class StaticPagesController < ApplicationController
   def root
   end
@@ -15,5 +17,15 @@ class StaticPagesController < ApplicationController
       format.svg { render "badge#{ style ? "-#{style}" : '' }" }
       format.html
     end
+  end
+
+  def status
+    render json: {
+      db: ActiveRecord::Base.connection.active?,
+      es: Elasticsearch::Model.client.ping,
+      redis: Docrystal.redis.ping == 'PONG',
+      octokit: Docrystal.octokit.rate_limit.as_json,
+      sidekiq: Sidekiq::Stats.new.as_json['stats']
+    }
   end
 end
