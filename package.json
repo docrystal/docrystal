@@ -11,7 +11,7 @@
   },
   "author": "docrystal.org",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "browserify": "^11.2.0",
     "browserify-incremental": "^3.0.1"
   }
