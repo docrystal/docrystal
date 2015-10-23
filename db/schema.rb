@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20151020122407) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "shard_docs", force: :cascade do |t|
     t.integer  "shard_id",          null: false
     t.string   "sha",               null: false
@@ -23,8 +26,8 @@ ActiveRecord::Schema.define(version: 20151020122407) do
     t.datetime "updated_at",        null: false
   end
 
-  add_index "shard_docs", ["shard_id", "sha"], name: "index_shard_docs_on_shard_id_and_sha", unique: true
-  add_index "shard_docs", ["shard_id"], name: "index_shard_docs_on_shard_id"
+  add_index "shard_docs", ["shard_id", "sha"], name: "index_shard_docs_on_shard_id_and_sha", unique: true, using: :btree
+  add_index "shard_docs", ["shard_id"], name: "index_shard_docs_on_shard_id", using: :btree
 
   create_table "shard_refs", force: :cascade do |t|
     t.integer  "shard_id",   null: false
@@ -34,9 +37,9 @@ ActiveRecord::Schema.define(version: 20151020122407) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "shard_refs", ["doc_id"], name: "index_shard_refs_on_doc_id"
-  add_index "shard_refs", ["shard_id", "name"], name: "index_shard_refs_on_shard_id_and_name", unique: true
-  add_index "shard_refs", ["shard_id"], name: "index_shard_refs_on_shard_id"
+  add_index "shard_refs", ["doc_id"], name: "index_shard_refs_on_doc_id", using: :btree
+  add_index "shard_refs", ["shard_id", "name"], name: "index_shard_refs_on_shard_id_and_name", unique: true, using: :btree
+  add_index "shard_refs", ["shard_id"], name: "index_shard_refs_on_shard_id", using: :btree
 
   create_table "shards", force: :cascade do |t|
     t.string   "hosting",    limit: 20, null: false
@@ -46,6 +49,9 @@ ActiveRecord::Schema.define(version: 20151020122407) do
     t.datetime "updated_at",            null: false
   end
 
-  add_index "shards", ["hosting", "owner", "name"], name: "idx_shards", unique: true
+  add_index "shards", ["hosting", "owner", "name"], name: "idx_shards", unique: true, using: :btree
 
+  add_foreign_key "shard_docs", "shards"
+  add_foreign_key "shard_refs", "shard_docs", column: "doc_id"
+  add_foreign_key "shard_refs", "shards"
 end
