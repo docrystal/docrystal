@@ -4,7 +4,7 @@ class Docrystal::Storage
   end
 
   def self.fog_storage
-    Fog::Storage.new(config)
+    Fog::Storage.new(config.except(:directory))
   end
 
   def self.fog_directory
