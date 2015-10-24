@@ -43,6 +43,7 @@ class Shard::DocsController < ApplicationController
     return(render('generating')) unless @doc.generated?
     return(render('error', status: 500)) if @doc.error?
 
+    @file_path = file
     @file = @doc.storage.get(file)
 
     if @file

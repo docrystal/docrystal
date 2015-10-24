@@ -15,4 +15,12 @@ ruby:
     image: image_path('docrystal-icon.png')
   })
 
+  set_meta_tags(canonical: doc_serve_url(
+    hosting: @shard.hosting,
+    owner: @shard.owner,
+    name: @shard.name,
+    sha: @doc.sha,
+    file: @file_path
+  ))
+
 = display_meta_tags(title: "#{@original_title} - docrystal.org")
