@@ -49,7 +49,7 @@ class Shard::DocsController < ApplicationController
     if @file
       track_event('Show Document', repository: @shard.full_name, sha: @doc.sha, file: file)
       mimetype = MimeMagic.by_path(file)
-      render(inline: @file.body, content_type: mimetype) if stale?(last_modified: @file.last_modified, public: true)
+      render(text: @file.body, content_type: mimetype) if stale?(last_modified: @file.last_modified, public: true)
     else
       fail FileNotFound, "File Not Found: #{@shard.full_name}##{@doc.sha} / #{file}"
     end
