@@ -7,6 +7,8 @@ class Shard::Doc < ActiveRecord::Base
   validates :github_commit, presence: true
 
   after_create :enqueue_job
+  after_save :purge
+  after_destroy :purge, :purge_all
 
   def self.by_sha(sha)
     find_or_create_by(sha: sha)

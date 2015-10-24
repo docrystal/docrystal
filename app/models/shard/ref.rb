@@ -9,6 +9,9 @@ class Shard::Ref < ActiveRecord::Base
 
   delegate :storage, :sha, :log_redis_key, :log_pusher_key, :generated?, :error?, :error, :error_description, to: :doc
 
+  after_save :purge
+  after_destroy :purge, :purge_all
+
   def github_ref
     @github_ref ||= Docrystal.octokit.ref(shard.github_repository_name, "heads/#{name}")
   rescue Octokit::NotFound

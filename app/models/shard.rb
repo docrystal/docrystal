@@ -27,6 +27,9 @@ class Shard < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { scope: %i(hosting owner) }, format: { with: GITHUB_REPO_NAME_REGEXP }
   validates :github_repository, presence: true
 
+  after_save :purge, :purge_all
+  after_destroy :purge, :purge_all
+
   settings do
     mappings dynamic: 'false' do
       indexes :full_name, index: 'not_analyzed'
