@@ -2,3 +2,8 @@ daily_update:
   cron: "0 11 * * *"
   class: "Shard::Doc::DailyUpdateJob"
   queue: "default"
+
+sitemap_update:
+  cron: "0 13 * * *"
+  class: "UpdateSitemapJob"
+  queue: "default"
