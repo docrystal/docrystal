@@ -333,6 +333,8 @@ GEM
       multi_json (~> 1.0)
       pusher-signature (~> 0.1.8)
     pusher-signature (0.1.8)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -499,6 +501,7 @@ DEPENDENCIES
   parallel
   pg
   pusher
+  quiet_assets
   rails (= 4.2.4)
   rambulance
   redcarpet

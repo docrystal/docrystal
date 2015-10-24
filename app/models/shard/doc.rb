@@ -1,5 +1,6 @@
 class Shard::Doc < ActiveRecord::Base
   belongs_to :shard, touch: true
+  has_many :refs, class_name: 'Shard::Ref', dependent: :destroy
 
   validates :shard, presence: true
   validates :sha, uniqueness: { scope: :shard_id }

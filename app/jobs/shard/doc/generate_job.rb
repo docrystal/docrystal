@@ -71,7 +71,7 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
 
   def container
     @container ||= Docker::Container.create(
-      'Image' => 'docrystal/crystal:v0.9.0',
+      'Image' => 'docrystal/crystal:0.9.0',
       'Cmd' => ['bash', '-c', 'while : ; do sleep 1; done'],
       'Tty' => false,
       'OpenStdin' => false,
@@ -96,10 +96,8 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
   end
 
   def execute_pre_commands
-    if File.exists?(working_dir.join('shard.yml'))
+    if file_exists?(container_working_dir.join('shard.yml'))
       shell('shards', 'install', chdir: container_working_dir)
-    else
-      shell('crystal', 'deps', chdir: container_working_dir) if File.exists?(working_dir.join('Projectfile'))
     end
   end
 
@@ -107,7 +105,13 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
     if @doc.shard.full_name == 'github.com/manastech/crystal'
       shell('make', 'doc', chdir: container_working_dir)
     else
-      shell('crystal', 'doc', chdir: container_working_dir)
+      rootfile_path = [ 'src', "#{@doc.shard.name.sub(/(?:\.cr)?\Z/, '.cr')}" ].join('/')
+
+      if file_exists?(container_working_dir.join(rootfile_path))
+        shell('crystal', 'doc', rootfile_path, chdir: container_working_dir)
+      else
+        shell('crystal', 'doc', chdir: container_working_dir)
+      end
     end
   end
 
@@ -152,6 +156,13 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
     end
 
     fail ShellError, cmd_log.join("") unless retval.last == 0
+  end
+
+  def file_exists?(file)
+    command = ['bash', '-c', "[ -f #{file} ]"]
+    retval = container.exec(command)
+
+    retval.last == 0
   end
 
   def log(msg, plain: true)
