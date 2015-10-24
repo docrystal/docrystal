@@ -113,6 +113,7 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
 
   def execute_post_commands
     shell('cp', '-r', container_working_dir.join('doc'), container_doc_path)
+    shell('chmod', '-R', '777', container_doc_path)
   end
 
   def upload_document
