@@ -64,13 +64,20 @@ class Shard::DocsController < ApplicationController
     header_insert_at = body.index('</head')
     return unless header_insert_at
 
-    body.insert(header_insert_at, render_to_string(partial: 'exdoc_header'))
+    @original_doc = Nokogiri::HTML(body)
+    @original_title = @original_doc.xpath('//title').first.content
+    @original_doc.xpath('//title').first.remove
+
+    head_element = @original_doc.at_css('head')
+    head_element.inner_html += render_to_string(partial: 'exdoc_header')
 
     footer_insert_at = body.index('</body')
     return unless footer_insert_at
 
-    body.insert(footer_insert_at, render_to_string(partial: 'exdoc_footer'))
 
-    response.body = body
+    body_element = @original_doc.at_css('body')
+    body_element.inner_html += render_to_string(partial: 'exdoc_footer')
+
+    response.body = @original_doc.to_html
   end
 end

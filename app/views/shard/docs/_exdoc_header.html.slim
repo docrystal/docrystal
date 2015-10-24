@@ -1,1 +1,18 @@
 = stylesheet_link_tag 'exdoc'
+
+ruby:
+  set_meta_tags(icon: [
+    { href: '/favicon.ico', type: 'image/x-icon' },
+    { href: image_path('favicon_96.png'), type: 'image/png' },
+    { href: image_path('favicon_96.png'), rel: 'apple-touch-icon-precomposed apple-touch-icon', sizes: '96x96', type: 'image/png' }
+  ])
+
+  set_meta_tags(twitter: {
+    card: "summary",
+    site: "@docrystal_org",
+    title: @original_title,
+    description: '',
+    image: image_path('docrystal-icon.png')
+  })
+
+= display_meta_tags(title: "#{@original_title} - docrystal.org")
