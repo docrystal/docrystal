@@ -43,7 +43,11 @@ class Shard::DocsController < ApplicationController
 
     set_surrogate_key_header @doc.record_key
 
-    return(render('generating')) unless @doc.generated?
+    unless @doc.generated?
+      expires_in(0, public: false, must_revalidate: true)
+      return render('generating')
+    end
+
     return(render('error', status: 500)) if @doc.error?
 
     @file_path = file
