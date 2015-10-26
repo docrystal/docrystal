@@ -46,14 +46,17 @@ html(dir="ltr" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://ogp
 
         .row.powered-by
           .four.columns
+            | Hosted by
             = link_to 'https://www.digitalocean.com/?refcode=934089c34e7c' do
-              | Hosted by
-              = image_tag('digitalocean-logo.png', alt: 'Digital Ocean', class: 'logo')
+              .logo-wrapper
+                = image_tag('digitalocean-logo.png', alt: 'Digital Ocean', class: 'logo')
           .four.columns
-            = link_to 'https://mackerel.io/' do
-              | Monitored by
-              = image_tag('mackerel-logo.png', alt: 'Mackerel', class: 'logo')
+            | Resolved with
+            = link_to 'https://dnsimple.com/' do
+              .logo-wrapper
+                = image_tag('dnsimple-logo.png', alt: 'DNSimple', class: 'logo')
           .four.columns
-            = link_to 'https://github.com/docrystal' do
-              | Developed by
-              = image_tag('docrystal-logo.svg', alt: 'docrystal', class: 'logo')
+            | Served by
+            = link_to 'https://www.fastly.com/' do
+              .logo-wrapper
+                = image_tag('fastly-logo.png', alt: 'Fastly', class: 'logo')
