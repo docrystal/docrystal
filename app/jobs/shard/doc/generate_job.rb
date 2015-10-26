@@ -97,7 +97,12 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
 
   def execute_pre_commands
     if file_exists?(container_working_dir.join('shard.yml'))
-      shell('shards', 'install', chdir: container_working_dir)
+      begin
+        shell('shards', 'install', chdir: container_working_dir)
+      rescue ShellError
+        shell('rm', 'shard.lock', chdir: container_working_dir)
+        shell('shards', 'install', chdir: container_working_dir)
+      end
     end
   end
 
