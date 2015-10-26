@@ -13,7 +13,6 @@ class Shard::DocsController < ApplicationController
     file: FILE_REGEXP
   }
 
-  before_filter :set_cache_control_headers, only: [:file_serve]
   after_action :append_exdoc_to_body, only: %i(file_serve)
 
   class FileNotFound < StandardError
@@ -41,6 +40,7 @@ class Shard::DocsController < ApplicationController
 
     fail FileNotFound unless @doc
 
+    set_cache_control_headers(FastlyRails.configuration.max_age, cache_control: '')
     set_surrogate_key_header @doc.record_key
 
     unless @doc.generated?
@@ -49,6 +49,8 @@ class Shard::DocsController < ApplicationController
     end
 
     return(render('error', status: 500)) if @doc.error?
+
+    expires_in(1.day, public: true, must_revalidate: false)
 
     @file_path = file
     @file = @doc.storage.get(file)
