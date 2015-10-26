@@ -19,6 +19,8 @@ class Shard::DocsController < ApplicationController
   end
 
   def repository(hosting, owner, name)
+    expires_in(0, public: false, must_revalidate: true)
+
     @shard = Shard.find_or_create_by!(hosting: hosting, owner: owner, name: name)
     @ref = @shard.lookup_ref(@shard.default_branch)
 
@@ -26,6 +28,8 @@ class Shard::DocsController < ApplicationController
   end
 
   def show(hosting, owner, name, sha)
+    expires_in(0, public: false, must_revalidate: true)
+
     @shard = Shard.find_or_create_by!(hosting: hosting, owner: owner, name: name)
     @ref = @shard.lookup_ref(sha)
 
