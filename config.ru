@@ -8,4 +8,5 @@ max_request_min =  3072
 max_request_max =  4096
 use Unicorn::WorkerKiller::MaxRequests, max_request_min, max_request_max
 
+use Rack::CanonicalHost, 'docrystal.org' if Rails.env.production?
 run Rails.application
