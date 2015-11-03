@@ -28,6 +28,7 @@ gem 'oj_mimic_json'
 gem 'parallel'
 gem 'pg'
 gem 'pusher'
+gem 'rack-canonical-host'
 gem 'rambulance'
 gem 'redcarpet'
 gem 'redis', require: %w(redis redis/connection/hiredis)
