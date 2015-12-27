@@ -71,7 +71,7 @@ class Shard::Doc::GenerateJob < ActiveJob::Base
 
   def container
     @container ||= Docker::Container.create(
-      'Image' => 'docrystal/crystal:0.9.0',
+      'Image' => 'docrystal/crystal:0.10.0',
       'Cmd' => ['bash', '-c', 'while : ; do sleep 1; done'],
       'Tty' => false,
       'OpenStdin' => false,
