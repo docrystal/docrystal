@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     get ':hosting/:owner/:name' => 'shard/docs#repository', as: :repository
     get ':hosting/:owner/:name/:sha' => 'shard/docs#show', as: :sha
     get ':hosting/:owner/:name/:sha/:file' => 'shard/docs#file_serve', as: :doc_serve
+    post ':hosting/:owner/:name/:sha/retry' => 'shard/docs#retry', as: :retry
   end
 
   get 'search' => 'search#show', as: :search

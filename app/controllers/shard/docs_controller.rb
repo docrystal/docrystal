@@ -14,6 +14,7 @@ class Shard::DocsController < ApplicationController
   }
 
   after_action :append_exdoc_to_body, only: %i(file_serve)
+  skip_before_action :verify_authenticity_token, only: %i(retry)
 
   class FileNotFound < StandardError
   end
@@ -66,6 +67,23 @@ class Shard::DocsController < ApplicationController
     else
       fail FileNotFound, "File Not Found: #{@shard.full_name}##{@doc.sha} / #{file}"
     end
+  end
+
+  def retry(hosting, owner, name, sha)
+    expires_in(0, public: false, must_revalidate: true)
+
+    @shard = Shard.find_or_create_by!(hosting: hosting, owner: owner, name: name)
+    @ref = @shard.lookup_ref(sha)
+    @doc = @ref.try(:doc)
+
+    fail FileNotFound unless @doc
+
+    @doc.update(error: nil, error_description: nil, generated_at: nil)
+    @doc.__send__(:enqueue_job)
+
+    expires_in(0, public: false, must_revalidate: true)
+
+    redirect_to doc_serve_path(hosting: hosting, owner: owner, name: name, sha: @ref.name, file: 'index.html')
   end
 
   private

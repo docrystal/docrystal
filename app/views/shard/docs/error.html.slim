@@ -2,3 +2,5 @@
   h1 Generation Error
 
   pre#console.term-container== Terminal.render(@doc.error_description)
+
+  = link_to 'Retry', retry_path(hosting: @shard.hosting, owner: @shard.owner, name: @shard.name, sha: @doc.name), class: 'btn', method: 'post'
